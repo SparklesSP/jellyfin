@@ -110,6 +110,10 @@ public class BaseItemEntity
 
     public bool IsVirtualItem { get; set; }
 
+    public bool HideFromGlobalLibrarySections { get; set; }
+
+    public bool ShowInGlobalLibrarySectionsAsLinkedParent { get; set; }
+
     public string? SeriesName { get; set; }
 
     public string? SeasonName { get; set; }

@@ -654,6 +654,10 @@ namespace MediaBrowser.Model.Dto
         /// <value><c>true</c> if [enable internet providers]; otherwise, <c>false</c>.</value>
         public bool? LockData { get; set; }
 
+        public bool? HideFromGlobalLibrarySections { get; set; }
+
+        public bool? ShowInGlobalLibrarySectionsAsLinkedParent { get; set; }
+
         public int? Width { get; set; }
 
         public int? Height { get; set; }

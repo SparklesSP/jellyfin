@@ -219,6 +219,9 @@ namespace Jellyfin.Server.Implementations.Migrations
                     b.Property<int?>("Height")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("HideFromGlobalLibrarySections")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("IndexNumber")
                         .HasColumnType("INTEGER");
 
@@ -327,6 +330,9 @@ namespace Jellyfin.Server.Implementations.Migrations
                     b.Property<string>("ShowId")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("ShowInGlobalLibrarySectionsAsLinkedParent")
+                        .HasColumnType("INTEGER");
+
                     b.Property<long?>("Size")
                         .HasColumnType("INTEGER");
 
@@ -422,6 +428,7 @@ namespace Jellyfin.Server.Implementations.Migrations
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                            HideFromGlobalLibrarySections = false,
                             IsFolder = false,
                             IsInMixedFolder = false,
                             IsLocked = false,
@@ -430,6 +437,7 @@ namespace Jellyfin.Server.Implementations.Migrations
                             IsSeries = false,
                             IsVirtualItem = false,
                             Name = "This is a placeholder item for UserData that has been detached from its original item",
+                            ShowInGlobalLibrarySectionsAsLinkedParent = false,
                             Type = "PLACEHOLDER"
                         });
                 });

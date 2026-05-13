@@ -182,6 +182,8 @@ namespace MediaBrowser.LocalMetadata.Savers
             await writer.WriteElementStringAsync(null, "Added", null, item.DateCreated.ToLocalTime().ToString("G", CultureInfo.InvariantCulture)).ConfigureAwait(false);
 
             await writer.WriteElementStringAsync(null, "LockData", null, item.IsLocked.ToString(CultureInfo.InvariantCulture).ToLowerInvariant()).ConfigureAwait(false);
+            await writer.WriteElementStringAsync(null, "HideFromGlobalLibrarySections", null, item.HideFromGlobalLibrarySections.ToString(CultureInfo.InvariantCulture).ToLowerInvariant()).ConfigureAwait(false);
+            await writer.WriteElementStringAsync(null, "ShowInGlobalLibrarySectionsAsLinkedParent", null, item.ShowInGlobalLibrarySectionsAsLinkedParent.ToString(CultureInfo.InvariantCulture).ToLowerInvariant()).ConfigureAwait(false);
 
             if (item.LockedFields.Length > 0)
             {

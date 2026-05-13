@@ -73,6 +73,8 @@ internal static class BaseItemMapper
         dto.LUFS = entity.LUFS;
         dto.NormalizationGain = entity.NormalizationGain;
         dto.IsVirtualItem = entity.IsVirtualItem;
+        dto.HideFromGlobalLibrarySections = entity.HideFromGlobalLibrarySections;
+        dto.ShowInGlobalLibrarySectionsAsLinkedParent = entity.ShowInGlobalLibrarySectionsAsLinkedParent;
         dto.ExternalSeriesId = entity.ExternalSeriesId;
         dto.Tagline = entity.Tagline;
         dto.TotalBitrate = entity.TotalBitrate;
@@ -249,6 +251,8 @@ internal static class BaseItemMapper
         entity.LUFS = dto.LUFS;
         entity.NormalizationGain = dto.NormalizationGain;
         entity.IsVirtualItem = dto.IsVirtualItem;
+        entity.HideFromGlobalLibrarySections = dto.HideFromGlobalLibrarySections;
+        entity.ShowInGlobalLibrarySectionsAsLinkedParent = dto.ShowInGlobalLibrarySectionsAsLinkedParent;
         entity.ExternalSeriesId = dto.ExternalSeriesId;
         entity.Tagline = dto.Tagline;
         entity.TotalBitrate = dto.TotalBitrate;

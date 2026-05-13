@@ -955,6 +955,8 @@ namespace Emby.Server.Implementations.Dto
                 dto.LockedFields = item.LockedFields;
                 dto.LockData = item.IsLocked;
                 dto.ForcedSortName = item.ForcedSortName;
+                dto.HideFromGlobalLibrarySections = item.HideFromGlobalLibrarySections;
+                dto.ShowInGlobalLibrarySectionsAsLinkedParent = item.ShowInGlobalLibrarySectionsAsLinkedParent;
             }
 
             dto.Container = item.Container;

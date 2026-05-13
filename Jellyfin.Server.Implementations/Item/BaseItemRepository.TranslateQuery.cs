@@ -420,7 +420,8 @@ public sealed partial class BaseItemRepository
         // Otherwise, items are filtered by their own name but then collapsed into a BoxSet
         // whose name may fall in a different range (e.g. "21 Jump Street" is under "#"
         // but its BoxSet "Jump Street Collection" should appear under "J").
-        if (filter.CollapseBoxSetItems != true)
+        if (filter.CollapseBoxSetItems != true
+            && !(filter.IsGlobalLibraryIndexQuery && filter.AllowLinkedParentReplacementInGlobalLibrarySections))
         {
             baseQuery = ApplyNameFilters(baseQuery, filter);
         }
