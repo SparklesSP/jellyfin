@@ -195,6 +195,8 @@ namespace MediaBrowser.Controller.Entities
             query.Recursive = true;
             query.Parent = parent;
             query.SetUser(user);
+            query.IsGlobalLibraryIndexQuery = true;
+            query.AllowLinkedParentReplacementInGlobalLibrarySections = true;
 
             query.IncludeItemTypes = [BaseItemKind.Movie];
 
@@ -363,6 +365,8 @@ namespace MediaBrowser.Controller.Entities
             query.Recursive = true;
             query.Parent = parent;
             query.SetUser(user);
+            query.IsGlobalLibraryIndexQuery = true;
+            query.AllowLinkedParentReplacementInGlobalLibrarySections = true;
 
             query.IncludeItemTypes = [BaseItemKind.Series];
 

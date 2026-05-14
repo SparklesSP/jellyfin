@@ -119,6 +119,10 @@ namespace MediaBrowser.Controller.Entities
         /// </summary>
         public BaseItemKind[] CollapseBoxSetItemTypes { get; set; } = [];
 
+        public bool IsGlobalLibraryIndexQuery { get; set; }
+
+        public bool AllowLinkedParentReplacementInGlobalLibrarySections { get; set; }
+
         public string? NameStartsWithOrGreater { get; set; }
 
         public string? NameStartsWith { get; set; }

@@ -134,6 +134,12 @@ namespace MediaBrowser.Controller.Entities
         [JsonIgnore]
         public bool IsVirtualItem { get; set; }
 
+        [JsonIgnore]
+        public bool HideFromGlobalLibrarySections { get; set; }
+
+        [JsonIgnore]
+        public bool ShowInGlobalLibrarySectionsAsLinkedParent { get; set; }
+
         /// <summary>
         /// Gets or sets the album.
         /// </summary>

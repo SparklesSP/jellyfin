@@ -391,6 +391,15 @@ public class ItemUpdateController : BaseJellyfinApiController
         }
 
         item.IsLocked = request.LockData ?? false;
+        if (request.HideFromGlobalLibrarySections.HasValue)
+        {
+            item.HideFromGlobalLibrarySections = request.HideFromGlobalLibrarySections.Value;
+        }
+
+        if (request.ShowInGlobalLibrarySectionsAsLinkedParent.HasValue)
+        {
+            item.ShowInGlobalLibrarySectionsAsLinkedParent = request.ShowInGlobalLibrarySectionsAsLinkedParent.Value;
+        }
 
         if (request.LockedFields is not null)
         {

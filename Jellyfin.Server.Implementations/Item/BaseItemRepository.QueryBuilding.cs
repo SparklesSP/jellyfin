@@ -86,6 +86,17 @@ public sealed partial class BaseItemRepository
             dbQuery = dbQuery.Distinct();
         }
 
+        if (filter.IsGlobalLibraryIndexQuery)
+        {
+            dbQuery = ApplyGlobalLibraryIndexFiltering(context, dbQuery, filter);
+
+            if (filter.AllowLinkedParentReplacementInGlobalLibrarySections)
+            {
+                // Name filters run after parent replacement so linked parent containers match by their own name.
+                dbQuery = ApplyNameFilters(dbQuery, filter);
+            }
+        }
+
         if (filter.CollapseBoxSetItems == true)
         {
             dbQuery = ApplyBoxSetCollapsing(context, dbQuery, filter.CollapseBoxSetItemTypes);
@@ -97,6 +108,81 @@ public sealed partial class BaseItemRepository
         dbQuery = ApplyOrder(dbQuery, filter, context);
 
         return dbQuery;
+    }
+
+    private IQueryable<BaseItemEntity> ApplyGlobalLibraryIndexFiltering(
+        JellyfinDbContext context,
+        IQueryable<BaseItemEntity> dbQuery,
+        InternalItemsQuery filter)
+    {
+        var movieTypeName = _itemTypeLookup.BaseItemKindNames[BaseItemKind.Movie];
+        var seriesTypeName = _itemTypeLookup.BaseItemKindNames[BaseItemKind.Series];
+        var boxSetTypeName = _itemTypeLookup.BaseItemKindNames[BaseItemKind.BoxSet];
+        var playlistTypeName = _itemTypeLookup.BaseItemKindNames[BaseItemKind.Playlist];
+
+        var includeMovie = filter.IncludeItemTypes.Contains(BaseItemKind.Movie);
+        var includeSeries = filter.IncludeItemTypes.Contains(BaseItemKind.Series);
+
+        if (!includeMovie && !includeSeries)
+        {
+            return dbQuery;
+        }
+
+        var currentIds = dbQuery.Select(e => e.Id);
+        var currentItems = context.BaseItems
+            .AsNoTracking()
+            .Where(e => currentIds.Contains(e.Id))
+            .Select(e => new
+            {
+                e.Id,
+                e.Type,
+                e.HideFromGlobalLibrarySections
+            });
+
+        var targetChildTypeNames = new List<string>(2);
+        if (includeMovie)
+        {
+            targetChildTypeNames.Add(movieTypeName);
+        }
+
+        if (includeSeries)
+        {
+            targetChildTypeNames.Add(seriesTypeName);
+        }
+
+        var visibleChildIds = currentItems
+            .Where(e => targetChildTypeNames.Contains(e.Type) && !e.HideFromGlobalLibrarySections)
+            .Select(e => e.Id);
+
+        var hiddenChildIds = currentItems
+            .Where(e => targetChildTypeNames.Contains(e.Type) && e.HideFromGlobalLibrarySections)
+            .Select(e => e.Id);
+
+        var parentContainerTypeNames = new[] { boxSetTypeName, playlistTypeName };
+        IQueryable<Guid> replacementParentIds = context.BaseItems
+            .Where(_ => false)
+            .Select(e => e.Id);
+
+        if (filter.AllowLinkedParentReplacementInGlobalLibrarySections)
+        {
+            replacementParentIds = context.LinkedChildren
+                .Where(lc => lc.ChildType == Database.Implementations.Entities.LinkedChildType.Manual
+                    && hiddenChildIds.Contains(lc.ChildId))
+                .Join(
+                    context.BaseItems.AsNoTracking()
+                        .Where(e => parentContainerTypeNames.Contains(e.Type) && e.ShowInGlobalLibrarySectionsAsLinkedParent),
+                    lc => lc.ParentId,
+                    p => p.Id,
+                    (_, p) => p.Id)
+                .Distinct();
+        }
+
+        var passthroughIds = currentItems
+            .Where(e => !targetChildTypeNames.Contains(e.Type) && !parentContainerTypeNames.Contains(e.Type))
+            .Select(e => e.Id);
+
+        var finalIds = passthroughIds.Union(visibleChildIds).Union(replacementParentIds);
+        return context.BaseItems.AsNoTracking().Where(e => finalIds.Contains(e.Id));
     }
 
     private IQueryable<BaseItemEntity> ApplyBoxSetCollapsing(

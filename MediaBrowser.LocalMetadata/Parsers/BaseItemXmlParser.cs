@@ -255,6 +255,12 @@ namespace MediaBrowser.LocalMetadata.Parsers
                 case "LockData":
                     item.IsLocked = string.Equals(reader.ReadNormalizedString(), "true", StringComparison.OrdinalIgnoreCase);
                     break;
+                case "HideFromGlobalLibrarySections":
+                    item.HideFromGlobalLibrarySections = string.Equals(reader.ReadNormalizedString(), "true", StringComparison.OrdinalIgnoreCase);
+                    break;
+                case "ShowInGlobalLibrarySectionsAsLinkedParent":
+                    item.ShowInGlobalLibrarySectionsAsLinkedParent = string.Equals(reader.ReadNormalizedString(), "true", StringComparison.OrdinalIgnoreCase);
+                    break;
                 case "Network":
                     foreach (var name in reader.GetStringArray())
                     {
